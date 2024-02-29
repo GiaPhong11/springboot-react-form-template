@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Checkbox, Switch, Radio, Button, Select, Typography } from 'antd';
-import "./FormComponent.css";
-import { sendPost, sendPut } from '../api';
+import "./style.css";
+import { sendPost, sendPut } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
@@ -10,7 +10,6 @@ const { Group: RadioGroup } = Radio;
 const { Option } = Select;
 
 const FormComponent: React.FC = () => {
-  // Trong component FormComponent
   const location = useLocation();
   const { user, isEdit } = location.state || {};
 
@@ -23,7 +22,6 @@ const FormComponent: React.FC = () => {
           password: user.password,
           textField: user.note,
         });
-        // Tìm kiếm phần tử trong mảng options dựa trên giá trị của user.dropdownOption và set giá trị cho dropdown
         const dropdownValue = options.find(option => option.value === user.dropdownOption);
         form.setFieldsValue({
           dropdown: dropdownValue ? dropdownValue.value : null,
@@ -106,9 +104,11 @@ const FormComponent: React.FC = () => {
   };
 
   const options = [
-    { label: 'Dropdown Option', value: 'Dropdown Option' },
     { label: 'Dropdown Option 1', value: 'Dropdown Option 1' },
     { label: 'Dropdown Option 2', value: 'Dropdown Option 2' },
+    { label: 'Dropdown Option 3', value: 'Dropdown Option 3' },
+    { label: 'Dropdown Option 4', value: 'Dropdown Option 4' },
+    { label: 'Dropdown Option 5', value: 'Dropdown Option 5' },
   ];
   const [form] = Form.useForm();
 
@@ -117,44 +117,44 @@ const FormComponent: React.FC = () => {
       <Form form={form} onFinish={finishForm}>
         <div className='form-content'>
           {inputText.map((item) => (
-            <div
-              key={item.value}
-              className='form-group'
-            >
-              <Typography.Text className='title'>{item.title}</Typography.Text>
-              <div>
-                <Form.Item
-                  name={item.value}
-                  rules={[
-                    {
-                      required: true,
-                      message: item.error,
-                    },
-                    {
-                      validator: (rule, value, callback) => {
-                        if (item.value === 'password') {
-                          if (value.length < 4 || value.length > 12) {
-                            callback('Password must be between 4 and 12 characters!');
+              <div
+                key={item.value}
+                className='form-group'
+              >
+                <Typography.Text className='title'>{item.title}</Typography.Text>
+                <div>
+                  <Form.Item
+                    name={item.value}
+                    rules={[
+                      {
+                        required: true,
+                        message: item.error,
+                      },
+                      {
+                        validator: (rule, value, callback) => {
+                          if (item.value === 'password') {
+                            if ((value !== undefined) && ((value.length > 0 && value.length < 4) || value.length > 12)) {
+                              callback('Password must be between 4 and 12 characters!');
+                            } else {
+                              callback();
+                            }
                           } else {
                             callback();
                           }
-                        } else {
-                          callback();
-                        }
+                        },
                       },
-                    },
-                  ]}
-                >
-                  <Input
-                    type={item.type}
-                    placeholder={item.placeHolder}
-                  />
-                </Form.Item>
-                <div className='notice text-shadow'>
-                  <span>{item.note}</span>
+                    ]}
+                  >
+                    <Input
+                      type={item.type}
+                      placeholder={item.placeHolder}
+                    />
+                  </Form.Item>
+                  <div className='notice text-shadow'>
+                    <span>{item.note}</span>
+                  </div>
                 </div>
               </div>
-            </div>
           ))}
           <div className='content-down'>
             <div className='form-group'>
@@ -182,13 +182,13 @@ const FormComponent: React.FC = () => {
                 <RadioGroup
                   onChange={handleRadioChange}
                   value={radioValue}>
-                  <div>
+                  <div className='radio-item'>
                     <Radio value="Radio Selection 1">Radio Selection 1</Radio>
                   </div>
-                  <div>
+                  <div className='radio-item'>
                     <Radio value="Radio Selection 2">Radio Selection 2</Radio>
                   </div>
-                  <div>
+                  <div className='radio-item'>
                     <Radio value="Radio Selection 3">Radio Selection 3</Radio>
                   </div>
                 </RadioGroup>

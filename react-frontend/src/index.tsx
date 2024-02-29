@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { BrowserRouter, Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import App from './userList/userList';
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import App from './component/userList/index';
 import reportWebVitals from './reportWebVitals';
 import { ConfigProvider } from 'antd';
-import FormComponent from './component/FormComponent';
+import UserManagement from './component/userManagement/index';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -16,8 +16,8 @@ root.render(
       <ConfigProvider theme={{ hashed: false }}>
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="/addEmployee" element={<FormComponent />} />
-          <Route path="/addEmployee/:id" element={<FormComponent />} />
+          <Route path="/add" element={<UserManagement />} />
+          <Route path="/edit/:id" element={<UserManagement />} />
         </Routes>
       </ConfigProvider>
     </React.StrictMode>

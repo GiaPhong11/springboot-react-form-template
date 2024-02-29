@@ -51,7 +51,7 @@ body {
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding: 25px 10px 25px 35px;
+    padding: 70px 10px 25px 35px;
     margin: 40px 40px 70px;
 }
 
@@ -225,8 +225,16 @@ input[type="radio"] {
     color: rgba(122, 92, 250, 1);
 }
 
+.dropdown-title {
+    margin-bottom: 10px;
+}
+
 .cancelBtn:hover {
     background-color: #dddad08c;
+}
+
+.radio-item {
+    margin: 12px 0;
 }
 
 .ant-checkbox .ant-checkbox-inner:after{
