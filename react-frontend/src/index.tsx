@@ -12,7 +12,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <Router>
-    <React.StrictMode>
       <ConfigProvider theme={{ hashed: false }}>
         <Routes>
           <Route path="/" element={<App />} />
@@ -20,7 +19,6 @@ root.render(
           <Route path="/edit/:id" element={<UserManagement />} />
         </Routes>
       </ConfigProvider>
-    </React.StrictMode>
   </Router>,
 );
 

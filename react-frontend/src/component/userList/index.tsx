@@ -30,9 +30,10 @@ const AllUser = () => {
     };
 
     // Trong component AllUser
-    const handleEditClick = (user: any) => {
-        const { password, ...userWithoutPassword } = user;
-        navigate(`/edit/${user.id}`, { state: { user: userWithoutPassword, isEdit: true } });
+    const handleEditClick = async (id: any) => {
+        // const { password, ...userWithoutPassword } = user;
+        const data = await sendGet(`employees/${id}`);
+        navigate(`/edit/${id}`, { state: { user: data, isEdit: true } });
     };
 
     const deleteUser = (id: BigInt) => {
@@ -56,11 +57,6 @@ const AllUser = () => {
 
     const columns = [
         // Các cột của bảng
-        {
-            title: "Id",
-            dataIndex: "id",
-            key: "id",
-        },
         {
             title: "UserName",
             dataIndex: "userName",
@@ -103,7 +99,7 @@ const AllUser = () => {
             key: "action",
             render: (record: any) => (
                 <span>
-                    <Button className="btn-edit" onClick={() => handleEditClick(record)}>Edit</Button>
+                    <Button className="btn-edit" onClick={() => handleEditClick(record.id)}>Edit</Button>
                     <Button className="btn-delete" onClick={() => deleteUser(record.id)}>Delete</Button>
                 </span>
             ),

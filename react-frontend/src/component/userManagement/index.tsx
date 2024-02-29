@@ -1,39 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Checkbox, Switch, Radio, Button, Select, Typography } from 'antd';
 import "./style.css";
-import { sendPost, sendPut } from '../../api';
+import { sendGet, sendPost, sendPut } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const { Group: RadioGroup } = Radio;
 
 const { Option } = Select;
 
+
 const FormComponent: React.FC = () => {
   const location = useLocation();
-  const { user, isEdit } = location.state || {};
+  let { user, isEdit } = location.state || {};
+  let { id } = useParams();
 
   useEffect(() => {
-    if (isEdit) {
-      console.log("Edit User");
-      if (user) {
+    const fetchData = async () => {
+      const handleUserData = (userData : any) => {
         form.setFieldsValue({
-          userName: user.userName,
-          password: user.password,
-          textField: user.note,
+          userName: userData.userName,
+          password: userData.password,
+          textField: userData.note,
         });
         const dropdownValue = options.find(option => option.value === user.dropdownOption);
         form.setFieldsValue({
           dropdown: dropdownValue ? dropdownValue.value : null,
         });
+
+        setRememberMe(userData.remember)
+        setRadioValue(userData.radioSelection)
+        setSwitchValue(userData.switchMode)
       }
 
-      setRememberMe(user.remember)
-      setRadioValue(user.radioSelection)
-      setSwitchValue(user.switchMode)
-    } else {
-      console.log("Add User");
-    }
+      if (isEdit) {
+        console.log("Edit User with button");
+        if (user) {
+          handleUserData(user);
+        }
+
+      } else if (id !== undefined) {
+        console.log("Edit User with link");
+        const fecthData = await sendGet(`employees/${id}`);
+        console.log(fecthData);
+        
+        if (fecthData) {
+          handleUserData(fecthData);
+        }
+      }
+    };
+
+    fetchData(); // Gọi fetchData từ useEffect
+
   }, [user])
   useEffect(() => {
   })
@@ -114,47 +133,47 @@ const FormComponent: React.FC = () => {
 
   return (
     <div className="form-container">
-      <Form form={form} onFinish={finishForm}>
+      <Form form={form} onFinish={finishForm} autoComplete='off'  initialValues={{ dropdown: options[0].value }}>
         <div className='form-content'>
           {inputText.map((item) => (
-              <div
-                key={item.value}
-                className='form-group'
-              >
-                <Typography.Text className='title'>{item.title}</Typography.Text>
-                <div>
-                  <Form.Item
-                    name={item.value}
-                    rules={[
-                      {
-                        required: true,
-                        message: item.error,
-                      },
-                      {
-                        validator: (rule, value, callback) => {
-                          if (item.value === 'password') {
-                            if ((value !== undefined) && ((value.length > 0 && value.length < 4) || value.length > 12)) {
-                              callback('Password must be between 4 and 12 characters!');
-                            } else {
-                              callback();
-                            }
+            <div
+              key={item.value}
+              className='form-group'
+            >
+              <Typography.Text className='title'>{item.title}</Typography.Text>
+              <div>
+                <Form.Item
+                  name={item.value}
+                  rules={[
+                    {
+                      required: true,
+                      message: item.error,
+                    },
+                    {
+                      validator: (rule, value, callback) => {
+                        if (item.value === 'password') {
+                          if ((value !== undefined) && ((value.length > 0 && value.length < 4) || value.length > 12)) {
+                            callback('Password must be between 4 and 12 characters!');
                           } else {
                             callback();
                           }
-                        },
+                        } else {
+                          callback();
+                        }
                       },
-                    ]}
-                  >
-                    <Input
-                      type={item.type}
-                      placeholder={item.placeHolder}
-                    />
-                  </Form.Item>
-                  <div className='notice text-shadow'>
-                    <span>{item.note}</span>
-                  </div>
+                    },
+                  ]}
+                >
+                  <Input
+                    type={item.type}
+                    placeholder={item.placeHolder}
+                  />
+                </Form.Item>
+                <div className='notice text-shadow'>
+                  <span>{item.note}</span>
                 </div>
               </div>
+            </div>
           ))}
           <div className='content-down'>
             <div className='form-group'>
