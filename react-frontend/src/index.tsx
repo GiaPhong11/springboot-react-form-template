@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import App from './component/userList/index';
+import App from './components/userList/index';
 import reportWebVitals from './reportWebVitals';
 import { ConfigProvider } from 'antd';
-import UserManagement from './component/userManagement/index';
+import UserManagement from './components/userManagement/index';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
