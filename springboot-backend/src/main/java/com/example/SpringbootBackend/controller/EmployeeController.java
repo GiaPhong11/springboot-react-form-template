@@ -4,10 +4,12 @@ import com.example.SpringbootBackend.dto.EmployeeDTO;
 import com.example.SpringbootBackend.exception.ResourceNotFoundException;
 import com.example.SpringbootBackend.model.Employee;
 import com.example.SpringbootBackend.repository.EmployeeRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,23 @@ public class EmployeeController {
     @PostMapping("/addEmployees")
     public Employee addNewEmployee(@RequestBody Employee employee) {
         return employeeRepository.save(employee);
+    }
+
+    //	add new employee
+    @PostMapping("/addEmployees2")
+    public ResponseEntity<Employee> addNewEmployee2(@RequestBody Employee employee, HttpServletRequest request) {
+
+        Employee newEmployee = employeeRepository.save(employee);
+        // Lấy URL tới nhân viên mới được tạo
+        String requestURL = request.getRequestURL().toString();
+        URI location = URI.create(requestURL + "/" + newEmployee.getId());
+        return ResponseEntity.created(location).body(newEmployee);
+    }
+
+    //	add new employee
+    @PostMapping("/addEmployees3")
+    public ResponseEntity<Employee> addNewEmployee3(@RequestBody Employee employee, HttpServletRequest request) {
+        return ResponseEntity.ok(employeeRepository.save(employee));
     }
 
     //	get employee by id
@@ -67,5 +86,6 @@ public class EmployeeController {
         response.put("success", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
+
 
 }

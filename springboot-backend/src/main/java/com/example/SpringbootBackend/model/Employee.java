@@ -1,15 +1,11 @@
 package com.example.SpringbootBackend.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
+@Table(name = "employees")
 @Entity
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name="employees")
+@Data
 public class Employee {
 
 	@Id
@@ -36,5 +32,4 @@ public class Employee {
 
 	@Column(name="dropdown_option")
 	private String dropdownOption;
-
 }
